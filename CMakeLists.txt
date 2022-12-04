@@ -4,7 +4,9 @@ project(kaleidoscope_compiler)
 set(CMAKE_CXX_STANDARD 14)
 
 set(source_list src/main.cpp
-        src/lexer/Lexer.cpp)
+        src/lexer/Lexer.cpp
+        src/ast/ExprAST.cpp)
+include_directories(include)
 
 find_package(LLVM REQUIRED CONFIG)
 

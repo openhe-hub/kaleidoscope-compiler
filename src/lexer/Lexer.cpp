@@ -1,4 +1,4 @@
-#include "Lexer.h"
+#include "lexer/Lexer.h"
 
 int Lexer::getToken() {
     static int lastChar = ' ';
