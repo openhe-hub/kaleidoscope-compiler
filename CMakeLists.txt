@@ -3,9 +3,11 @@ project(kaleidoscope_compiler)
 
 set(CMAKE_CXX_STANDARD 14)
 
-set(source_list src/main.cpp
-        src/lexer/Lexer.cpp
-        src/ast/ExprAST.cpp)
+file(GLOB_RECURSE source_list "src/*.cpp")
+foreach(source ${source_list})
+    message("add: ${source}")
+endforeach()
+
 include_directories(include)
 
 find_package(LLVM REQUIRED CONFIG)

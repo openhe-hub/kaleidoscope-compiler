@@ -1,13 +1,10 @@
-//
-// Created by sjtu on 22-12-4.
-//
-
 #ifndef KALEIDOSCOPE_COMPILER_EXPRAST_H
 #define KALEIDOSCOPE_COMPILER_EXPRAST_H
 
 
 class ExprAST {
-
+public:
+    virtual ~ExprAST();
 };
 
 
