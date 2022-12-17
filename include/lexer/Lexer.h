@@ -50,6 +50,7 @@ public:
     PrototypeAST *parsePrototype();
     FunctionAST *parseFunction();
     FunctionAST *parseTopLevelExpr();
+    PrototypeAST *parseExtern();
 
     ExprAST *parsePrimary();
     // top-level parser

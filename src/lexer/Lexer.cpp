@@ -131,6 +131,12 @@ FunctionAST *Lexer::parseFunction() {
     return nullptr;
 }
 
+PrototypeAST *Lexer::parseExtern() {
+    getNextToken(); // eat extern
+    return parsePrototype();
+}
+
+
 // top_level_expr = expression
 FunctionAST *Lexer::parseTopLevelExpr() {
     if (ExprAST *expr=parseExpression()){
@@ -224,7 +230,9 @@ void Lexer::mainLoop() {
             }
                 break;
         }
-        if(curToken==';') std::cout<<"<<<";
+        if(curToken==';') {
+            std::cout<<"<<<";
+        }
     }
 }
 
@@ -237,7 +245,7 @@ void Lexer::handleDefinition() {
 }
 
 void Lexer::handleExtern() {
-    if (parsePrototype()){
+    if (parseExtern()){
         std::cout<<">>>Parsed an extern."<<std::endl;
     } else{
         getNextToken();
@@ -251,6 +259,7 @@ void Lexer::handleTopLevelExpression() {
         getNextToken();
     }
 }
+
 
 
 
