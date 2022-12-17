@@ -8,3 +8,4 @@
 ## <2022.12.17>
 ### [UPD]
 - expr ast classes
+- finish lexer
