@@ -5,6 +5,7 @@
 
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Lexer lexer;
+    lexer.mainLoop();
     return 0;
 }
