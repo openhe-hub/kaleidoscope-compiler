@@ -11,6 +11,7 @@ private:
     std::vector<ExprAST*> args;
 public:
     CallExprAST(const std::string &calle,std::vector<ExprAST*> &args);
+    virtual llvm::Value *codeGen() override;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_CALLEXPRAST_H

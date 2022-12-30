@@ -157,16 +157,16 @@ ExprAST *Lexer::parseExpression() {
 ExprAST *Lexer::parseBinOpRHS(int exprPrec, ExprAST *lhs) {
     while (1){
         int tokenPrec=getTokenPrecedence();
-        // 1.
+        // 1. if the precedence of prev node is higher, stop parse
         if (tokenPrec<exprPrec) return lhs;
-        // 2.
+        // 2. get next op & expr
         int op=curToken;
         getNextToken(); // eat op
         ExprAST *rhs= parsePrimary();
         if(!rhs) return nullptr;
         // 3.
-        // a+b*c
         int nextPrec=getTokenPrecedence();
+        // a+b*c
         if (tokenPrec<nextPrec){
             rhs= parseBinOpRHS(tokenPrec+1,rhs);
             if (!rhs) return nullptr;

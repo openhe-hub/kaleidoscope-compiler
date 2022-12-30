@@ -10,7 +10,7 @@ private:
     ExprAST *lhs, *rhs;
 public:
     BinaryExprAST(char op,ExprAST *lhs,ExprAST *rhs);
-
+    virtual llvm::Value *codeGen() override;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_BINARYEXPRAST_H

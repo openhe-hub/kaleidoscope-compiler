@@ -9,7 +9,7 @@ private:
     ExprAST *body;
 public:
     FunctionAST(PrototypeAST *prototype,ExprAST *body);
-
+    llvm::Function *codeGen() ;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_FUNCTIONAST_H

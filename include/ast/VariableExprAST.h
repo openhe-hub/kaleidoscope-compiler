@@ -9,6 +9,7 @@ private:
     std::string name;
 public:
     VariableExprAST(std::string name);
+    virtual llvm::Value *codeGen() override;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_VARIABLEEXPRAST_H
