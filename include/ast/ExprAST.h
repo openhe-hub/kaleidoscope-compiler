@@ -6,7 +6,10 @@
 class ExprAST {
 public:
     virtual ~ExprAST();
-    virtual llvm::Value *codeGen()=0;
+    virtual llvm::Value *codeGen(llvm::LLVMContext *theContext,
+                                 llvm::Module *theModule,
+                                 std::map<std::string,llvm::Value*> variables,
+                                 llvm::IRBuilder<> *builder)=0;
 };
 
 

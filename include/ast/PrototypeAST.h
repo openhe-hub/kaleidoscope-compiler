@@ -11,7 +11,10 @@ private:
     std::vector<std::string> args;
 public:
     PrototypeAST(const std::string &name, const std::vector<std::string> &args);
-    llvm::Function *codeGen();
+     llvm::Value *codeGen(llvm::LLVMContext *theContext,
+                                 llvm::Module *theModule,
+                                 std::map<std::string,llvm::Value*> variables,
+                                 llvm::IRBuilder<> *builder) ;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_PROTOTYPEAST_H

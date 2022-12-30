@@ -9,7 +9,10 @@ private:
     std::string name;
 public:
     VariableExprAST(std::string name);
-    virtual llvm::Value *codeGen() override;
+    virtual llvm::Value *codeGen(llvm::LLVMContext *theContext,
+                                 llvm::Module *theModule,
+                                 std::map<std::string,llvm::Value*> variables,
+                                 llvm::IRBuilder<> *builder) override;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_VARIABLEEXPRAST_H

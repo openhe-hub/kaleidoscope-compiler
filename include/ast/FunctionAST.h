@@ -9,7 +9,10 @@ private:
     ExprAST *body;
 public:
     FunctionAST(PrototypeAST *prototype,ExprAST *body);
-    llvm::Function *codeGen() ;
+    llvm::Value *codeGen(llvm::LLVMContext *theContext,
+                         llvm::Module *theModule,
+                         std::map<std::string,llvm::Value*> variables,
+                         llvm::IRBuilder<> *builder) ;
 };
 
 #endif //KALEIDOSCOPE_COMPILER_FUNCTIONAST_H
