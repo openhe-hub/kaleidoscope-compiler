@@ -14,6 +14,8 @@
 #include "ast/CallExprAST.h"
 #include "ast/BinaryExprAST.h"
 
+#include "backend/CodeGenerator.h"
+
 class Lexer{
 private:
     enum Token {
@@ -54,11 +56,11 @@ public:
 
     ExprAST *parsePrimary();
     // top-level parser
-    void handleDefinition();
-    void handleExtern();
-    void handleTopLevelExpression();
+    void handleDefinition(CodeGenerator &codeGenerator);
+    void handleExtern(CodeGenerator &codeGenerator);
+    void handleTopLevelExpression(CodeGenerator &codeGenerator);
 
-    void mainLoop();
+    void mainLoop(CodeGenerator &codeGenerator);
 };
 
 #endif //KALEIDOSCOPE_COMPILER_LEXER_H

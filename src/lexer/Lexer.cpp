@@ -206,7 +206,7 @@ int Lexer::getTokenPrecedence() {
     return precedenceTable[curToken];
 }
 
-void Lexer::mainLoop() {
+void Lexer::mainLoop(CodeGenerator &codeGenerator) {
     std::cout<<"<<<";
     getNextToken();
     while (1){
@@ -214,11 +214,11 @@ void Lexer::mainLoop() {
             case tok_eof:
                 return;
             case tok_def:{
-                handleDefinition();
+                handleDefinition(codeGenerator);
             }
                 break;
             case tok_extern:{
-                handleExtern();
+                handleExtern(codeGenerator);
             }
                 break;
             case ';': {
@@ -226,7 +226,7 @@ void Lexer::mainLoop() {
             }
                 break;
             default:{
-                handleTopLevelExpression();
+                handleTopLevelExpression(codeGenerator);
             }
                 break;
         }
@@ -236,25 +236,28 @@ void Lexer::mainLoop() {
     }
 }
 
-void Lexer::handleDefinition() {
-    if (parseFunction()){
+void Lexer::handleDefinition(CodeGenerator &codeGenerator) {
+    if (FunctionAST *functionAst=parseFunction()){
         std::cout<<">>>Parsed a function definition."<<std::endl;
+        codeGenerator.generateFunction(functionAst);
     } else{
         getNextToken();
     }
 }
 
-void Lexer::handleExtern() {
-    if (parseExtern()){
+void Lexer::handleExtern(CodeGenerator &codeGenerator) {
+    if (PrototypeAST *prototypeAst=parseExtern()){
         std::cout<<">>>Parsed an extern."<<std::endl;
+        codeGenerator.generatePrototype(prototypeAst);
     } else{
         getNextToken();
     }
 }
 
-void Lexer::handleTopLevelExpression() {
-    if (parseTopLevelExpr()){
+void Lexer::handleTopLevelExpression(CodeGenerator &codeGenerator) {
+    if (FunctionAST *functionAst=parseTopLevelExpr()){
         std::cout<<">>>Parsed a top-level expression."<<std::endl;
+        codeGenerator.generateTopLevelExpr(functionAst);
     } else{
         getNextToken();
     }

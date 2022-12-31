@@ -7,6 +7,8 @@
 int main() {
     Lexer lexer;
     Utils::logWelcome();
-    lexer.mainLoop();
+    CodeGenerator codeGenerator;
+    codeGenerator.initModule();
+    lexer.mainLoop(codeGenerator);
     return 0;
 }
