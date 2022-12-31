@@ -7,7 +7,7 @@ CallExprAST::CallExprAST(const std::string &callee, std::vector<ExprAST *> &args
 }
 
 llvm::Value *CallExprAST::codeGen(llvm::LLVMContext *theContext, llvm::Module *theModule,
-                                  std::map<std::string, llvm::Value *> variables, llvm::IRBuilder<> *builder) {
+                                  std::map<std::string, llvm::Value *> &variables, llvm::IRBuilder<> *builder) {
     llvm::Function *func=theModule->getFunction(callee);
     if (!func) return CodeGenerator::errorV("unknown function referenced.");
     if (func->arg_size()!=args.size()) return CodeGenerator::errorV("incorrect function arguments passed.");

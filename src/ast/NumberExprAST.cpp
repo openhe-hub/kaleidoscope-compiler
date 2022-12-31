@@ -11,6 +11,6 @@ NumberExprAST::NumberExprAST(double val):val(val) {
 }
 
 llvm::Value *NumberExprAST::codeGen(llvm::LLVMContext *theContext, llvm::Module *theModule,
-                                    std::map<std::string, llvm::Value *> variables, llvm::IRBuilder<> *builder) {
+                                    std::map<std::string, llvm::Value *> &variables, llvm::IRBuilder<> *builder) {
     return llvm::ConstantFP::get(*theContext,llvm::APFloat(val));
 }

@@ -5,7 +5,7 @@ PrototypeAST::PrototypeAST(const std::string &name, const std::vector<std::strin
         : name(name), args(args) {}
 
 llvm::Function *PrototypeAST::codeGen(llvm::LLVMContext *theContext, llvm::Module *theModule,
-                                      std::map<std::string, llvm::Value *> variables, llvm::IRBuilder<> *builder) {
+                                      std::map<std::string, llvm::Value *> &variables, llvm::IRBuilder<> *builder) {
     //1. create params: n*double
     std::vector<llvm::Type *> doubles(args.size(), llvm::Type::getDoubleTy(*theContext));
     //2. create function type with n * double, num of param is unchangeable

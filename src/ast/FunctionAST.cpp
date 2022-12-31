@@ -6,7 +6,7 @@ FunctionAST::FunctionAST(PrototypeAST *prototype, ExprAST *body) : prototype(pro
 }
 
 llvm::Function *FunctionAST::codeGen(llvm::LLVMContext *theContext, llvm::Module *theModule,
-                                     std::map<std::string, llvm::Value *> variables, llvm::IRBuilder<> *builder) {
+                                     std::map<std::string, llvm::Value *> &variables, llvm::IRBuilder<> *builder) {
     variables.clear();
     llvm::Function *theFunction =prototype->codeGen(theContext,theModule,variables,builder);
     if (!theFunction) return nullptr;
