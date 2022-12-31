@@ -9,7 +9,7 @@ private:
     ExprAST *body;
 public:
     FunctionAST(PrototypeAST *prototype,ExprAST *body);
-    llvm::Value *codeGen(llvm::LLVMContext *theContext,
+    llvm::Function *codeGen(llvm::LLVMContext *theContext,
                          llvm::Module *theModule,
                          std::map<std::string,llvm::Value*> variables,
                          llvm::IRBuilder<> *builder) ;

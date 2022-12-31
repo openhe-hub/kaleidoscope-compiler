@@ -9,3 +9,8 @@
 ### [UPD]
 - expr ast classes
 - finish lexer
+
+## <2022.12.30/31>
+### [UPD]
+- add code gen for ast classes
+- learn llvm IR expression

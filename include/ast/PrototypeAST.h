@@ -11,7 +11,7 @@ private:
     std::vector<std::string> args;
 public:
     PrototypeAST(const std::string &name, const std::vector<std::string> &args);
-     llvm::Value *codeGen(llvm::LLVMContext *theContext,
+     llvm::Function *codeGen(llvm::LLVMContext *theContext,
                                  llvm::Module *theModule,
                                  std::map<std::string,llvm::Value*> variables,
                                  llvm::IRBuilder<> *builder) ;
