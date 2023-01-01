@@ -15,7 +15,7 @@ void CodeGenerator::initModule() {
 }
 
 void CodeGenerator::initFunctionPassManager() {
-    theFPM=new llvm::legacy::FunctionPassManager(theModule);
+    theFPM = new llvm::legacy::FunctionPassManager(theModule);
     // add four elementary pass to optimize function generation
     theFPM->add(llvm::createInstructionCombiningPass());
     theFPM->add(llvm::createReassociatePass());
@@ -28,11 +28,11 @@ void CodeGenerator::initJIT() {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
     llvm::InitializeNativeTargetAsmParser();
-    theJIT=new llvm::orc::KaleidoscopeJIT();
+    theJIT = new llvm::orc::KaleidoscopeJIT();
 }
 
 llvm::Function *CodeGenerator::generateFunction(FunctionAST *functionAst) {
-    llvm::Function *function = functionAst->codeGen(theContext, theModule, variables, builder,theFPM);
+    llvm::Function *function = functionAst->codeGen(theContext, theModule, variables, builder, theFPM);
     if (function) {
         std::cout << ">>>Function IR code generated successfully" << std::endl;
         function->print(llvm::errs());
@@ -55,10 +55,30 @@ llvm::Function *CodeGenerator::generatePrototype(PrototypeAST *prototypeAst) {
     }
 }
 
+//TODO: fix function not found bug.
 llvm::Function *CodeGenerator::generateTopLevelExpr(FunctionAST *functionAst) {
-    llvm::Function *function = functionAst->codeGen(theContext, theModule, variables, builder,theFPM);
+    llvm::Function *function = functionAst->codeGen(theContext, theModule, variables, builder, theFPM);
     if (function) {
         std::cout << ">>>Top-level expression IR code generated successfully" << std::endl;
+
+        // JIT the module containing the anonymous expression, keeping a handle so
+        // we can free it later.
+        std::unique_ptr<llvm::Module> pModule(theModule);
+        auto handler = theJIT->addModule(std::move(pModule));
+        initModule();
+        initFunctionPassManager();
+
+        // Search the JIT for the __anon_expr symbol.
+        auto ExprSymbol = theJIT->findSymbol("__anon_expr");
+        assert(ExprSymbol && "Function not found");
+
+        // Get the symbol's address and cast it to the right type (takes no
+        // arguments, returns a double) so we can call it as a native function.
+        double (*FP)() = (double (*)()) (intptr_t) cantFail(ExprSymbol.getAddress());
+        fprintf(stderr, "Evaluated to %f\n", FP());
+        // Delete the anonymous expression module from the JIT.
+        theJIT->removeModule(handler);
+
         function->print(llvm::errs());
         return function;
     } else {

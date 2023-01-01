@@ -28,3 +28,4 @@ message(STATUS "Find ${llvm_libs}")
 # test
 file(GLOB_RECURSE test_list "test/*.cpp")
 add_executable(test ${test_list})
+target_link_libraries(test ${llvm_libs})

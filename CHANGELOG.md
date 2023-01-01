@@ -18,3 +18,7 @@
 ## <2023.1.1>
 ### [UPD]
 - add function optimization 
+- add jit support
+- update test code && cmake
+### [BUG]
+- function not found in JIT calc
