@@ -2,6 +2,7 @@
 
 
 CodeGenerator::CodeGenerator() {
+    initJIT();
     initModule();
     initFunctionPassManager();
 }
@@ -9,6 +10,7 @@ CodeGenerator::CodeGenerator() {
 void CodeGenerator::initModule() {
     theContext = new llvm::LLVMContext();
     theModule = new llvm::Module("my cool jit", *theContext);
+    theModule->setDataLayout(theJIT->getTargetMachine().createDataLayout());
     builder = new llvm::IRBuilder<>(*theContext);
 }
 
@@ -20,6 +22,13 @@ void CodeGenerator::initFunctionPassManager() {
     theFPM->add(llvm::createGVNPass());
     theFPM->add(llvm::createCFGSimplificationPass());
     theFPM->doInitialization();
+}
+
+void CodeGenerator::initJIT() {
+    llvm::InitializeNativeTarget();
+    llvm::InitializeNativeTargetAsmPrinter();
+    llvm::InitializeNativeTargetAsmParser();
+    theJIT=new llvm::orc::KaleidoscopeJIT();
 }
 
 llvm::Function *CodeGenerator::generateFunction(FunctionAST *functionAst) {
@@ -62,6 +71,8 @@ llvm::Value *CodeGenerator::errorV(const char *str) {
     std::cout << str << std::endl;
     return nullptr;
 }
+
+
 
 
 

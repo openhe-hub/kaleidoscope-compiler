@@ -21,6 +21,8 @@
 #include "ast/FunctionAST.h"
 #include "ast/PrototypeAST.h"
 
+#include "jit/KaleidoscopeJIT.h"
+
 class CodeGenerator{
 private:
     llvm::Module *theModule;
@@ -28,11 +30,13 @@ private:
     llvm::IRBuilder<> *builder;
     std::map<std::string,llvm::Value*> variables; // map: var => llvm Value ptr
     llvm::legacy::FunctionPassManager *theFPM;
+    llvm::orc::KaleidoscopeJIT *theJIT;
 public:
     CodeGenerator();
     static llvm::Value *errorV(const char *str);
     void initModule();
     void initFunctionPassManager();
+    void initJIT();
     llvm::Function *generateFunction(FunctionAST *functionAst);
     llvm::Function *generatePrototype(PrototypeAST *prototypeAst);
     llvm::Function *generateTopLevelExpr(FunctionAST *functionAst);
