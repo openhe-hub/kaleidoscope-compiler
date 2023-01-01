@@ -4,7 +4,7 @@
 PrototypeAST::PrototypeAST(const std::string &name, const std::vector<std::string> &args)
         : name(name), args(args) {}
 
-llvm::Function *PrototypeAST::codeGen(llvm::LLVMContext *theContext, llvm::Module *theModule,
+llvm::Function *PrototypeAST::codeGen(llvm::LLVMContext *theContext, std::unique_ptr<llvm::Module> &theModule,
                                       std::map<std::string, llvm::Value *> &variables, llvm::IRBuilder<> *builder) {
     //1. create params: n*double
     std::vector<llvm::Type *> doubles(args.size(), llvm::Type::getDoubleTy(*theContext));
@@ -12,7 +12,7 @@ llvm::Function *PrototypeAST::codeGen(llvm::LLVMContext *theContext, llvm::Modul
     llvm::FunctionType *functionType = llvm::FunctionType::get(llvm::Type::getDoubleTy(*theContext), doubles, false);
     //3. create function
     llvm::Function *function = llvm::Function::Create(functionType,
-                                                      llvm::Function::ExternalLinkage, name, theModule);
+                                                      llvm::Function::ExternalLinkage, name, theModule.get());
     // test if duplicated
     if (function->getName() != name) {
         // remove and use the defined one

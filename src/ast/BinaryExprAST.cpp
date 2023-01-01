@@ -6,7 +6,7 @@ BinaryExprAST::BinaryExprAST(char op, ExprAST *lhs, ExprAST *rhs) : op(op), lhs(
 
 }
 
-llvm::Value *BinaryExprAST::codeGen(llvm::LLVMContext *theContext, llvm::Module *theModule,
+llvm::Value *BinaryExprAST::codeGen(llvm::LLVMContext *theContext, std::unique_ptr<llvm::Module> &theModule,
                                     std::map<std::string, llvm::Value *> &variables, llvm::IRBuilder<> *builder) {
     llvm::Value *lval=lhs->codeGen(theContext,theModule,variables,builder);
     llvm::Value *rval=rhs->codeGen(theContext,theModule,variables,builder);

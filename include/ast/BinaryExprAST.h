@@ -11,7 +11,7 @@ private:
 public:
     BinaryExprAST(char op,ExprAST *lhs,ExprAST *rhs);
     virtual llvm::Value *codeGen(llvm::LLVMContext *theContext,
-                                 llvm::Module *theModule,
+                                 std::unique_ptr<llvm::Module> &theModule,
                                  std::map<std::string,llvm::Value*> &variables,
                                  llvm::IRBuilder<> *builder) override;
 };

@@ -141,7 +141,7 @@ PrototypeAST *Lexer::parseExtern() {
 FunctionAST *Lexer::parseTopLevelExpr() {
     if (ExprAST *expr=parseExpression()){
         // make an anonymous prototype
-        PrototypeAST *prototype=new PrototypeAST("",std::vector<std::string>());
+        PrototypeAST *prototype=new PrototypeAST("__anon_expr",std::vector<std::string>());
         return new FunctionAST(prototype,expr);
     }
     return nullptr;

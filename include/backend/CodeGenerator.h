@@ -25,18 +25,19 @@
 
 class CodeGenerator{
 private:
-    llvm::Module *theModule;
+    std::unique_ptr<llvm::Module> theModule;
     llvm::LLVMContext *theContext;
     llvm::IRBuilder<> *builder;
     std::map<std::string,llvm::Value*> variables; // map: var => llvm Value ptr
-    llvm::legacy::FunctionPassManager *theFPM;
-    llvm::orc::KaleidoscopeJIT *theJIT;
+    std::unique_ptr<llvm::legacy::FunctionPassManager> theFPM;
+    std::unique_ptr<llvm::orc::KaleidoscopeJIT> theJIT;
 public:
     CodeGenerator();
     static llvm::Value *errorV(const char *str);
     void initModule();
     void initFunctionPassManager();
     void initJIT();
+    void initModuleAndPassManager();
     llvm::Function *generateFunction(FunctionAST *functionAst);
     llvm::Function *generatePrototype(PrototypeAST *prototypeAst);
     llvm::Function *generateTopLevelExpr(FunctionAST *functionAst);

@@ -7,15 +7,21 @@ CodeGenerator::CodeGenerator() {
     initFunctionPassManager();
 }
 
+void CodeGenerator::initModuleAndPassManager() {
+    theModule = std::make_unique<llvm::Module>("my jit",*theContext);
+    theModule->setDataLayout(theJIT->getTargetMachine().createDataLayout());
+    initFunctionPassManager();
+}
+
 void CodeGenerator::initModule() {
     theContext = new llvm::LLVMContext();
-    theModule = new llvm::Module("my cool jit", *theContext);
+    theModule = std::make_unique<llvm::Module>("my jit",*theContext);
     theModule->setDataLayout(theJIT->getTargetMachine().createDataLayout());
     builder = new llvm::IRBuilder<>(*theContext);
 }
 
 void CodeGenerator::initFunctionPassManager() {
-    theFPM = new llvm::legacy::FunctionPassManager(theModule);
+    theFPM = std::make_unique<llvm::legacy::FunctionPassManager>(theModule.get());
     // add four elementary pass to optimize function generation
     theFPM->add(llvm::createInstructionCombiningPass());
     theFPM->add(llvm::createReassociatePass());
@@ -28,7 +34,7 @@ void CodeGenerator::initJIT() {
     llvm::InitializeNativeTarget();
     llvm::InitializeNativeTargetAsmPrinter();
     llvm::InitializeNativeTargetAsmParser();
-    theJIT = new llvm::orc::KaleidoscopeJIT();
+    theJIT = std::make_unique<llvm::orc::KaleidoscopeJIT>();
 }
 
 llvm::Function *CodeGenerator::generateFunction(FunctionAST *functionAst) {
@@ -55,7 +61,6 @@ llvm::Function *CodeGenerator::generatePrototype(PrototypeAST *prototypeAst) {
     }
 }
 
-//TODO: fix function not found bug.
 llvm::Function *CodeGenerator::generateTopLevelExpr(FunctionAST *functionAst) {
     llvm::Function *function = functionAst->codeGen(theContext, theModule, variables, builder, theFPM);
     if (function) {
@@ -63,10 +68,8 @@ llvm::Function *CodeGenerator::generateTopLevelExpr(FunctionAST *functionAst) {
 
         // JIT the module containing the anonymous expression, keeping a handle so
         // we can free it later.
-        std::unique_ptr<llvm::Module> pModule(theModule);
-        auto handler = theJIT->addModule(std::move(pModule));
-        initModule();
-        initFunctionPassManager();
+        auto handler = theJIT->addModule(std::move(theModule));
+        initModuleAndPassManager();
 
         // Search the JIT for the __anon_expr symbol.
         auto ExprSymbol = theJIT->findSymbol("__anon_expr");
@@ -91,6 +94,8 @@ llvm::Value *CodeGenerator::errorV(const char *str) {
     std::cout << str << std::endl;
     return nullptr;
 }
+
+
 
 
 
