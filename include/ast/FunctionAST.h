@@ -3,6 +3,8 @@
 #include "ast/PrototypeAST.h"
 #include "ast/ExprAST.h"
 
+#include "llvm/IR/LegacyPassManager.h"
+
 class FunctionAST{
 private:
     PrototypeAST *prototype;
@@ -12,7 +14,8 @@ public:
     llvm::Function *codeGen(llvm::LLVMContext *theContext,
                          llvm::Module *theModule,
                          std::map<std::string,llvm::Value*> &variables,
-                         llvm::IRBuilder<> *builder) ;
+                         llvm::IRBuilder<> *builder,
+                         llvm::legacy::FunctionPassManager *theFPM);
 };
 
 #endif //KALEIDOSCOPE_COMPILER_FUNCTIONAST_H

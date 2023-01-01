@@ -4,11 +4,10 @@
 #include "utils/Utils.h"
 
 
-int main() {
+int main(int argc, char **argv) {
     Lexer lexer;
     Utils::logWelcome();
     CodeGenerator codeGenerator;
-    codeGenerator.initModule();
     lexer.mainLoop(codeGenerator);
     return 0;
 }

@@ -14,3 +14,7 @@
 ### [UPD]
 - add code gen for ast classes
 - learn llvm IR expression
+
+## <2023.1.1>
+### [UPD]
+- add function optimization 
